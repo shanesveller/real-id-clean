@@ -5,7 +5,11 @@ local myname, ns = ...
 _G["SLASH_".. myname:upper().."1"] = GetAddOnMetadata(myname, "X-LoadOn-Slash")
 SlashCmdList[myname:upper()] = function(msg)
 	-- Do crap here
-	if msg == "scan" then
+	if msg = "" then
+	  ns:Print("Usage: /ric <command>")
+	  ns:Print("Valid commands are: ")
+	  ns:Print("scan clear clearignored undo undoall auto")
+	elseif msg == "scan" then
   	ns:CheckFriendsMatches()
   elseif msg == "clear"
     ns.db.friends = {}
