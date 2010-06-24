@@ -20,13 +20,15 @@ end
 
 function ns:PLAYER_LOGIN()
 	self:RegisterEvent("PLAYER_LOGOUT")
-	self:RegisterEvent("BN_FRIEND_LIST_SIZE_CHANGED")
-	self:RegisterEvents("BN_FRIEND_TOON_ONLINE","BN_FRIEND_ACCOUNT_ONLINE")
 
 	-- Do anything you need to do after the player has entered the world
 	self:CollectRealIDFriends()
   self:CollectRealIDToons()
 	self:CheckFriendsMatches()
+
+	self:RegisterEvent("BN_FRIEND_LIST_SIZE_CHANGED")
+	self:RegisterEvents("BN_FRIEND_TOON_ONLINE","BN_FRIEND_ACCOUNT_ONLINE")
+  self:RegisterEvent("FRIENDLIST_UPDATE")
 
 	self:UnregisterEvent("PLAYER_LOGIN")
 	self.PLAYER_LOGIN = nil
