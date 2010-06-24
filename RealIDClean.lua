@@ -50,15 +50,21 @@ end
 function ns:CollectRealIDToons()
   local _,online = BNGetNumFriends()
   for i=1,online do
-    local _, givenName, surname, toonName, _, _, _, _, _, _, _, note = BNGetFriendInfo(i)
-    local fullName = givenName .. surname
-    local found = false
-    for _,name in ipairs(ns.db.friends[fullName]) do
-      if name == fullName then found = true end
-    end
-    if not found then
-      Debug("New alt found for " .. fullName .. ": " .. toonName)
-      table.insert(ns.db.friends[fullName], toonName)
+    local _, givenName, surname, toonName, _, client, _, _, _, _, _, note = BNGetFriendInfo(i)
+    Debug(givenName, surname, toonName, client)
+    if client == "WoW" then
+      local fullName = givenName .. surname
+      local found = false
+      for _,name in ipairs(ns.db.friends[fullName]) do
+        if name == fullName then
+          found = true
+          break
+        end
+      end
+      if not found then
+        Debug("New alt found for " .. fullName .. ": " .. toonName)
+        table.insert(ns.db.friends[fullName], toonName)
+      end
     end
   end
 end
