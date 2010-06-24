@@ -2,8 +2,10 @@
 local myname, ns = ...
 
 
-ns.defaults = {}
-ns.defaultsPC = {}
+ns.defaults = {
+  friends = {}, -- Real ID friends
+}
+ns.defaultsPC = {} -- No need to save non-Real ID friends list in DBPC (yet)
 
 
 function ns.InitDB()
