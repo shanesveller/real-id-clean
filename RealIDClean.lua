@@ -126,6 +126,7 @@ end
 
 
 function ns:CheckFriendsMatches()
+  self:Debug("Checking for friend list matches")
   local friend_toons = {}
   for name, toons in pairs(ns.db.friends) do
     for i=1, #(toons) do
@@ -159,12 +160,11 @@ StaticPopupDialogs["REALID_CLEAN_PROMPT"] = {
   button1 = "Yes",
   button2 = "No",
   OnAccept = function(self, data, data2)
-    local toonName, friendName = ns.dbpc.removeChar, ns.dbpc.removeReason
+    local toonName, friendName = data, data2
     Debug("Remove friend " .. toonName)
+    RemoveFriend(toonName)
     ns.dbpc.removed[toonName] = friendName
     table.insert(ns.dbpc.recentlyRemoved, toonName)
-    ns.dbpc.removeChar = nil
-    ns.dbpc.removeReason = nil
   end,
   timeout = 0,
   whileDead = true,
