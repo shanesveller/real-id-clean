@@ -117,6 +117,36 @@ function ns:CheckFriendsMatches()
     local name = GetFriendInfo(i)
     if friend_toons[name] then
       self:Debug(name .. " appears to belong to " .. friend_toons[name])
+      self:PromptToRemove(name, friend_toons[name])
     end
   end
 end
+
+
+function ns:PromptToRemove(toonName, friendName)
+  -- See also: http://www.wowwiki.com/Creating_simple_pop-up_dialog_boxes
+  local popup = StaticPopup_Show("REALID_CLEAN_PROMPT", toonName, friendName)
+  if (popup) then
+    popup.data = toonName
+    popup.data2 = friendName
+  end
+end
+
+
+StaticPopupDialogs["REALID_CLEAN_PROMPT"] = {
+  text = "The character '%s' appears to belong to your RealID friend, '%s'. Would you like to remove this character from your friends list?",
+  button1 = "Yes",
+  button2 = "No",
+  OnAccept = function(self, data, data2)
+    local toonName, friendName = ns.dbpc.removeChar, ns.dbpc.removeReason
+    Debug("Remove friend " .. toonName)
+    ns.dbpc.removed[toonName] = friendName
+    table.insert(ns.dbpc.recentlyRemoved, toonName)
+    ns.dbpc.removeChar = nil
+    ns.dbpc.removeReason = nil
+  end,
+  timeout = 0,
+  whileDead = true,
+  hideOnEscape = true,
+  showAlert = true,
+}
