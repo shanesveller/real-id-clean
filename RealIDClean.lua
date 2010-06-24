@@ -20,6 +20,8 @@ end
 
 function ns:PLAYER_LOGIN()
 	self:RegisterEvent("PLAYER_LOGOUT")
+	self:RegisterEvent("BN_FRIEND_LIST_SIZE_CHANGED")
+	self:RegisterEvents("BN_FRIEND_TOON_ONLINE","BN_FRIEND_ACCOUNT_ONLINE")
 
 	-- Do anything you need to do after the player has entered the world
 	self:CollectRealIDFriends()
@@ -35,6 +37,19 @@ function ns:PLAYER_LOGOUT()
 	self:FlushDB()
 	-- Do anything you need to do as the player logs out
 end
+
+
+function ns:BN_FRIEND_LIST_SIZE_CHANGED()
+  Debug("BN_FRIEND_LIST_SIZE_CHANGED")
+  self:CollectRealIDFriends()
+end
+
+
+function ns:BN_FRIEND_TOON_ONLINE()
+  Debug(event) -- Should hopefully print "BN_FRIEND_TOON_ONLINE" / "BN_FRIEND_ACCOUNT_ONLINE" if I'm doinitrite
+  self:CollectRealIDToons()
+end
+ns.BN_FRIEND_ACCOUNT_ONLINE = ns.BN_FRIEND_TOON_ONLINE -- No idea if this actually does what I'm hoping
 
 
 function ns:CollectRealIDFriends()
