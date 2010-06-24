@@ -171,3 +171,22 @@ StaticPopupDialogs["REALID_CLEAN_PROMPT"] = {
   hideOnEscape = true,
   showAlert = true,
 }
+
+
+function ns:UndoLastRemoval()
+  local lastRemoved = ns.dbpc.recentlyRemoved[1]
+  self:Debug("Undo last removal: " .. lastRemoved)
+  AddFriend(lastRemoved)
+  table.remove(ns.dbpc.recentlyRemoved, 1)
+  ns.dbpc.removed[lastRemoved] = nil
+end
+
+
+function ns:UndoAllRemovals()
+  self:Debug("Undo all removals")
+  for name, _ in pairs(ns.dbpc.removed) do
+    AddFriend(name)
+  end
+  ns.dbpc.removed = {}
+  ns.dbpc.recentlyRemoved = {}
+end
