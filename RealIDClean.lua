@@ -48,6 +48,7 @@ end
 
 -- Be combat friendly
 function ns:PLAYER_ENTER_COMBAT()
+  StaticPopup_Hide("REALID_CLEAN_PROMPT")
   self:UnregisterEvent("BN_FRIEND_LIST_SIZE_CHANGED")
 	self:UnregisterEvents("BN_FRIEND_TOON_ONLINE","BN_FRIEND_ACCOUNT_ONLINE")
   self:UnregisterEvent("FRIENDLIST_UPDATE")
