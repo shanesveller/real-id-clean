@@ -22,6 +22,8 @@ function ns:PLAYER_LOGIN()
 	self:RegisterEvent("PLAYER_LOGOUT")
 
 	-- Do anything you need to do after the player has entered the world
+	self:CollectRealIDFriends()
+  self:CollectRealIDToons()
 	self:CheckFriendsMatches()
 
 	self:UnregisterEvent("PLAYER_LOGIN")
@@ -80,9 +82,6 @@ end
 
 
 function ns:CheckFriendsMatches()
-  self:CollectRealIDFriends()
-  self:CollectRealIDToons()
-
   local friend_toons = {}
   for name, toons in pairs(ns.db.friends) do
     for i=1, #(toons) do
