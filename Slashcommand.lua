@@ -5,7 +5,7 @@ local myname, ns = ...
 _G["SLASH_".. myname:upper().."1"] = GetAddOnMetadata(myname, "X-LoadOn-Slash")
 SlashCmdList[myname:upper()] = function(msg)
 	-- Do crap here
-	if msg = "" then
+	if msg == "" then
 	  ns:Print("Usage: /ric <command>")
 	  ns:Print("Valid commands are: ")
 	  ns:Print("scan clear clearignored undo undoall auto")
