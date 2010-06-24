@@ -1,0 +1,10 @@
+package-as: RealIDClean
+
+enable-nolib-creation: no
+
+ignore:
+  - README.textile
+
+manual-changelog: CHANGELOG.txt
+
+license-output: LICENSE.txt
