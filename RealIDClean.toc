@@ -1,6 +1,6 @@
 ## Interface: 30300
 
-## Title: RealID Clean
+## Title: RealIDClean
 ## Notes: Cleans your friends list of toons belonging to your RealID friends
 ## Author: Ithato
 ## Version: Pre-Alpha
