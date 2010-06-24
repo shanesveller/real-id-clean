@@ -11,17 +11,17 @@ SlashCmdList[myname:upper()] = function(msg)
 	  ns:Print("scan clear clearignored undo undoall auto")
 	elseif msg == "scan" then
   	ns:CheckFriendsMatches()
-  elseif msg == "clear"
+  elseif msg == "clear" then
     ns.db.friends = {}
     ns:Print("Data on your Real ID friends' alts has been cleared.")
-  elseif msg == "clearignored"
+  elseif msg == "clearignored" then
     ns:Print("Ignored characters cleared.")
     ns.db.ignored = {}
-  elseif msg == "undo"
+  elseif msg == "undo" then
     ns:UndoLastRemoval()
-  elseif msg == "undoall"
+  elseif msg == "undoall" then
     ns:UndoAllRemovals()
-  elseif msg == "auto"
+  elseif msg == "auto" then
     ns.db.auto = not ns.db.auto
     if ns.db.auto then
       ns:Print("Now automatically scanning your friends list on login.")
