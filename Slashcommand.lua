@@ -10,6 +10,9 @@ SlashCmdList[myname:upper()] = function(msg)
   elseif msg == "clear"
     ns.db.friends = {}
     ns:Print("Data on your Real ID friends' alts has been cleared.")
+  elseif msg == "clearignored"
+    ns:Print("Ignored characters cleared.")
+    ns.db.ignored = {}
   elseif msg == "undo"
     ns:UndoLastRemoval()
   elseif msg == "undoall"

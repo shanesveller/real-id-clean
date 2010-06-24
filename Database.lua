@@ -4,6 +4,7 @@ local myname, ns = ...
 
 ns.defaults = {
   friends = {}, -- Real ID friends
+  ignored = {},
   auto = false,
 }
 ns.defaultsPC = {

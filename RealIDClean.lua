@@ -156,21 +156,29 @@ end
 
 
 StaticPopupDialogs["REALID_CLEAN_PROMPT"] = {
-  text = "The character '%s' appears to belong to your RealID friend, '%s'. Would you like to remove this character from your friends list?",
+  text = "The character '%s' appears to belong to your RealID friend, '%s'. Would you like to remove this character from your friends list? Click \"Ignore\" to never be prompted about this character again.",
   button1 = "Yes",
   button2 = "No",
+  button3 = "Ignore",
   OnAccept = function(self, data, data2)
-    local toonName, friendName = data, data2
-    Debug("Remove friend " .. toonName)
-    RemoveFriend(toonName)
-    ns.dbpc.removed[toonName] = friendName
-    table.insert(ns.dbpc.recentlyRemoved, toonName)
+    ns:RemoveFriend(data, data2) -- toonName, friendName
+  end,
+  OnAlt = function(self, data, data2)
+    ns:AddIgnored(data) -- toonName
   end,
   timeout = 0,
   whileDead = true,
   hideOnEscape = true,
   showAlert = true,
 }
+
+
+function ns:RemoveFriend(toonName, friendName)
+  Debug("Remove friend " .. toonName)
+  ns.dbpc.removed[toonName] = friendName
+  table.insert(ns.dbpc.recentlyRemoved, toonName)
+  RemoveFriend(toonName)
+end
 
 
 function ns:UndoLastRemoval()
@@ -189,4 +197,22 @@ function ns:UndoAllRemovals()
   end
   ns.dbpc.removed = {}
   ns.dbpc.recentlyRemoved = {}
+end
+
+
+function ns:AddIgnored(toonName)
+  Debug("Ignore friend " .. toonName)
+  ns.db.ignored[toonName] = true
+end
+
+
+function ns:RemoveIgnored(toonName)
+  Debug("Un-ignore friend " .. toonName)
+  ns.db.ignored[toonName] = nil
+end
+
+
+function ns:ClearIgnored()
+  Debug("Removing all ignored friends")
+  self.db.ignored = {}
 end
