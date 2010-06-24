@@ -1,21 +1,21 @@
 ## Interface: 30300
 
-## Title: Addon Template
-## Notes: Template for creating new addons
-## Author: Tekkub Stoutwrithe
-## Version: Alpha
-## X-Website: http://tekkub.net/
-## X-Email: tekkub-wow@googlegroups.com
+## Title: RealID Clean
+## Notes: Cleans your friends list of toons belonging to your RealID friends
+## Author: Ithato
+## Version: Pre-Alpha
+## X-Website: http://ithato.com/
+## X-Email: shane@ithato.com
 ## X-Category: Misc
 
-## SavedVariables: AddonTemplateDB
-## SavedVariablesPerCharacter: AddonTemplateDBPC
+## SavedVariables: RealIDCleanDB
+## SavedVariablesPerCharacter: RealIDCleanDBPC
 
 ## OptionalDeps: tekDebug, tekErr
 
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
-## X-LoadOn-Slash: /addontemplate
+## X-LoadOn-Slash: /ric
 
 LibStub.lua
 tekKonfigAboutPanel.lua
@@ -26,4 +26,4 @@ Slashcommand.lua
 UtilityFunctions.lua
 EventDispatcher.lua
 
-AddonTemplate.lua
+RealIDClean.lua
