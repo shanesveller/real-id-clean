@@ -26,7 +26,7 @@ function ns:PLAYER_LOGIN()
   if not InCombatLockdown() then
   	self:CollectRealIDFriends()
     self:CollectRealIDToons()
-  	self:CheckFriendsMatches()
+  	if self.db.auto then self:CheckFriendsMatches() end
 
   	self:RegisterEvent("BN_FRIEND_LIST_SIZE_CHANGED")
   	self:RegisterEvents("BN_FRIEND_TOON_ONLINE","BN_FRIEND_ACCOUNT_ONLINE")
