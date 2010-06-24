@@ -40,13 +40,13 @@ end
 
 
 function ns:BN_FRIEND_LIST_SIZE_CHANGED()
-  Debug("BN_FRIEND_LIST_SIZE_CHANGED")
+  self:Debug("BN_FRIEND_LIST_SIZE_CHANGED")
   self:CollectRealIDFriends()
 end
 
 
 function ns:BN_FRIEND_TOON_ONLINE()
-  Debug(event) -- Should hopefully print "BN_FRIEND_TOON_ONLINE" / "BN_FRIEND_ACCOUNT_ONLINE" if I'm doinitrite
+  self:Debug(event) -- Should hopefully print "BN_FRIEND_TOON_ONLINE" / "BN_FRIEND_ACCOUNT_ONLINE" if I'm doinitrite
   self:CollectRealIDToons()
 end
 ns.BN_FRIEND_ACCOUNT_ONLINE = ns.BN_FRIEND_TOON_ONLINE -- No idea if this actually does what I'm hoping
@@ -58,7 +58,7 @@ function ns:CollectRealIDFriends()
     local _, givenName, surname = BNGetFriendInfo(i)
     local fullName = givenName .. surname
     if not ns.db.friends[fullName] then
-      Debug("New Real ID friend found: " .. fullName)
+      self:Debug("New Real ID friend found: " .. fullName)
       ns.db.friends[fullName] = {}
     end
   end
@@ -68,7 +68,7 @@ function ns:CollectRealIDToons()
   local _,online = BNGetNumFriends()
   for i=1,online do
     local _, givenName, surname, toonName, _, client, _, _, _, _, _, note = BNGetFriendInfo(i)
-    Debug(givenName, surname, toonName, client)
+    self:Debug(givenName, surname, toonName, client)
     if client == "WoW" then
       local fullName = givenName .. surname
       local found = false
@@ -79,7 +79,7 @@ function ns:CollectRealIDToons()
         end
       end
       if not found then
-        Debug("New alt found for " .. fullName .. ": " .. toonName)
+        self:Debug("New alt found for " .. fullName .. ": " .. toonName)
         table.insert(ns.db.friends[fullName], toonName)
       end
     end
@@ -108,7 +108,7 @@ function ns:CheckFriendsMatches()
   for i=1,numFriends do
     local name = GetFriendInfo(i)
     if friend_toons[name] then
-      Debug(name .. " appears to belong to " .. friend_toons[name])
+      self:Debug(name .. " appears to belong to " .. friend_toons[name])
     end
   end
 end
