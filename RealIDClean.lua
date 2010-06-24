@@ -54,6 +54,12 @@ end
 ns.BN_FRIEND_ACCOUNT_ONLINE = ns.BN_FRIEND_TOON_ONLINE -- No idea if this actually does what I'm hoping
 
 
+function ns:FRIENDLIST_UPDATE()
+  self:Debug(event)
+  self:CheckFriendMatches()
+end
+
+
 function ns:CollectRealIDFriends()
   local friends = BNGetNumFriends()
   for i=1,friends do
