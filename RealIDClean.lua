@@ -64,21 +64,21 @@ end
 
 
 function ns:BN_FRIEND_LIST_SIZE_CHANGED()
-  self:Debug("BN_FRIEND_LIST_SIZE_CHANGED")
+  self.Debug("BN_FRIEND_LIST_SIZE_CHANGED")
   self:CollectRealIDFriends()
 end
 
 
 function ns:BN_FRIEND_TOON_ONLINE()
-  self:Debug(event) -- Should hopefully print "BN_FRIEND_TOON_ONLINE" / "BN_FRIEND_ACCOUNT_ONLINE" if I'm doinitrite
+  self.Debug(event) -- Should hopefully print "BN_FRIEND_TOON_ONLINE" / "BN_FRIEND_ACCOUNT_ONLINE" if I'm doinitrite
   self:CollectRealIDToons()
 end
 ns.BN_FRIEND_ACCOUNT_ONLINE = ns.BN_FRIEND_TOON_ONLINE -- No idea if this actually does what I'm hoping
 
 
 function ns:FRIENDLIST_UPDATE()
-  self:Debug(event)
-  self:CheckFriendMatches()
+  self.Debug(event)
+  self:CheckFriendsMatches()
 end
 
 
@@ -86,10 +86,10 @@ function ns:CollectRealIDFriends()
   local friends = BNGetNumFriends()
   for i=1,friends do
     local _, givenName, surname = BNGetFriendInfo(i)
-    local fullName = givenName .. surname
-    if not ns.db.friends[fullName] then
-      self:Debug("New Real ID friend found: " .. fullName)
-      ns.db.friends[fullName] = {}
+    local fullName = givenName .. " " .. surname
+    if not self.db.friends[fullName] then
+      self.Debug("New Real ID friend found: " .. fullName)
+      self.db.friends[fullName] = {}
     end
   end
 end
@@ -98,19 +98,21 @@ function ns:CollectRealIDToons()
   local _,online = BNGetNumFriends()
   for i=1,online do
     local _, givenName, surname, toonName, _, client, _, _, _, _, _, note = BNGetFriendInfo(i)
-    self:Debug(givenName, surname, toonName, client)
+	local found, fullName = false, givenName .. " " .. surname
+	local _,_,_, realm = BNGetFriendToonInfo(i,1)
     if client == "WoW" then
-      local fullName = givenName .. surname
-      local found = false
-      for _,name in ipairs(ns.db.friends[fullName]) do
-        if name == fullName then
+	  self.Debug(givenName, surname, toonName, realm, client)
+      for _,nameAndRealm in ipairs(self.db.friends[fullName]) do
+		local checkRealm, checkName = strsplit("-",nameAndRealm)
+		self.Debug(checkRealm, realm, checkName, name)
+        if checkRealm == realm and checkName == toonName then
           found = true
           break
         end
       end
       if not found then
-        self:Debug("New alt found for " .. fullName .. ": " .. toonName)
-        table.insert(ns.db.friends[fullName], toonName)
+        self.Debug("New alt found for " .. fullName .. ": " .. toonName .. " on " .. realm)
+        table.insert(self.db.friends[fullName], realm .. "-" .. toonName)
       end
     end
   end
@@ -118,8 +120,8 @@ end
 
 
 function ns:ListRealIDAlts(fullName)
-  if ns.db.friends[fullName] then
-    return join(ns.db.friends[fullName], ", ")
+  if #self.db.friends[fullName] > 0 then
+    return join(self.db.friends[fullName], ", ")
   else
     return "No known alts"
   end
@@ -127,11 +129,15 @@ end
 
 
 function ns:CheckFriendsMatches()
-  self:Debug("Checking for friend list matches")
-  local friend_toons = {}
-  for name, toons in pairs(ns.db.friends) do
-    for i=1, #(toons) do
-      friend_toons[toons[i]] = name
+  self.Debug("Checking for friend list matches")
+  local friend_toons, myRealm = {}, GetRealmName()
+  for name, realmsAndNames in pairs(self.db.friends) do
+    for i=1, #(realmsAndNames) do
+	  local realm, toonName = strsplit("-",realmsAndNames[i])
+	  self.Debug(myRealm, realm, toonName)
+      if realm == myRealm then
+		friend_toons[toonName] = name
+	  end
     end
   end
 
@@ -139,7 +145,7 @@ function ns:CheckFriendsMatches()
   for i=1,numFriends do
     local name = GetFriendInfo(i)
     if friend_toons[name] then
-      self:Debug(name .. " appears to belong to " .. friend_toons[name])
+      self.Debug(name .. " appears to belong to " .. friend_toons[name])
       self:PromptToRemove(name, friend_toons[name])
     end
   end
@@ -175,45 +181,49 @@ StaticPopupDialogs["REALID_CLEAN_PROMPT"] = {
 
 
 function ns:RemoveFriend(toonName, friendName)
-  Debug("Remove friend " .. toonName)
-  ns.dbpc.removed[toonName] = friendName
-  table.insert(ns.dbpc.recentlyRemoved, toonName)
+  self.Debug("Remove friend " .. toonName)
+  self.dbpc.removed[toonName] = friendName
+  table.insert(self.dbpc.recentlyRemoved, toonName)
   RemoveFriend(toonName)
 end
 
 
 function ns:UndoLastRemoval()
-  local lastRemoved = ns.dbpc.recentlyRemoved[1]
-  self:Debug("Undo last removal: " .. lastRemoved)
+  self:UnregisterEvent("FRIENDLIST_UPDATE")
+  local lastRemoved = self.dbpc.recentlyRemoved[1]
+  self.Debug("Undo last removal: " .. lastRemoved)
   AddFriend(lastRemoved)
-  table.remove(ns.dbpc.recentlyRemoved, 1)
-  ns.dbpc.removed[lastRemoved] = nil
+  table.remove(self.dbpc.recentlyRemoved, 1)
+  self.dbpc.removed[lastRemoved] = nil
+  self:RegisterEvent("FRIENDLIST_UPDATE")
 end
 
 
 function ns:UndoAllRemovals()
-  self:Debug("Undo all removals")
-  for name, _ in pairs(ns.dbpc.removed) do
+  self:UnregisterEvent("FRIENDLIST_UPDATE")
+  self.Debug("Undo all removals")
+  for name, _ in pairs(self.dbpc.removed) do
     AddFriend(name)
   end
-  ns.dbpc.removed = {}
-  ns.dbpc.recentlyRemoved = {}
+  self.dbpc.removed = {}
+  self.dbpc.recentlyRemoved = {}
+  self:RegisterEvent("FRIENDLIST_UPDATE")
 end
 
 
 function ns:AddIgnored(toonName)
-  Debug("Ignore friend " .. toonName)
-  ns.db.ignored[toonName] = true
+  self.Debug("Ignore friend " .. toonName)
+  self.db.ignored[toonName] = true
 end
 
 
 function ns:RemoveIgnored(toonName)
-  Debug("Un-ignore friend " .. toonName)
-  ns.db.ignored[toonName] = nil
+  self.Debug("Un-ignore friend " .. toonName)
+  self.db.ignored[toonName] = nil
 end
 
 
 function ns:ClearIgnored()
-  Debug("Removing all ignored friends")
+  self.Debug("Removing all ignored friends")
   self.db.ignored = {}
 end
