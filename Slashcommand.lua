@@ -4,13 +4,13 @@ local myname, ns = ...
 
 _G["SLASH_".. myname:upper().."1"] = GetAddOnMetadata(myname, "X-LoadOn-Slash")
 SlashCmdList[myname:upper()] = function(msg)
-	-- Do crap here
-	if msg == "" then
-	  ns.Print("Usage: /ric <command>")
-	  ns.Print("Valid commands are: ")
-	  ns.Print("scan clear clearignored undo undoall auto")
-	elseif msg == "scan" then
-  	ns:CheckFriendsMatches()
+  -- Do crap here
+  if msg == "" then
+    ns.Print("Usage: /ric <command>")
+    ns.Print("Valid commands are: ")
+    ns.Print("scan clear clearignored undo undoall alts auto")
+  elseif msg == "scan" then
+    ns:CheckFriendsMatches()
   elseif msg == "clear" then
     ns.db.friends = {}
     ns.Print("Data on your Real ID friends' alts has been cleared.")
@@ -22,10 +22,11 @@ SlashCmdList[myname:upper()] = function(msg)
   elseif msg == "undoall" then
     ns:UndoAllRemovals()
   elseif msg == "alts" then
-	for i=1,BNGetNumFriends() do
-		local _, givenName, surname = BNGetFriendInfo(i)
-		ns:ListRealIDAlts(givenName .. " " .. surname)
-	end
+  for fullName, alts in pairs(ns.db.friends) do
+    if #(alts) > 0 then
+    ns:ListRealIDAlts(fullName)
+    end
+  end
   elseif msg == "auto" then
     ns.db.auto = not ns.db.auto
     if ns.db.auto then
