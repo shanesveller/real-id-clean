@@ -144,7 +144,7 @@ function ns:CheckFriendsMatches()
   local numFriends = GetNumFriends()
   for i=1,numFriends do
     local name = GetFriendInfo(i)
-    if friend_toons[name] then
+    if friend_toons[name] and not self.db.ignored[myRealm .. "-" .. name] then
       self.Debug(name .. " appears to belong to " .. friend_toons[name])
       self:PromptToRemove(name, friend_toons[name])
     end
@@ -171,7 +171,7 @@ StaticPopupDialogs["REALID_CLEAN_PROMPT"] = {
     ns:RemoveFriend(data, data2) -- toonName, friendName
   end,
   OnAlt = function(self, data, data2)
-    ns:AddIgnored(data) -- toonName
+    ns:AddIgnored(data, data2) -- toonName
   end,
   timeout = 0,
   whileDead = true,
@@ -211,15 +211,15 @@ function ns:UndoAllRemovals()
 end
 
 
-function ns:AddIgnored(toonName)
-  self.Debug("Ignore friend " .. toonName)
-  self.db.ignored[toonName] = true
+function ns:AddIgnored(toonName, realmName)
+  self.Debug("Ignore friend " .. toonName .. " of " .. realmName)
+  self.db.ignored[realmName .. "-" .. toonName] = true
 end
 
 
-function ns:RemoveIgnored(toonName)
+function ns:RemoveIgnored(toonName, realmName)
   self.Debug("Un-ignore friend " .. toonName)
-  self.db.ignored[toonName] = nil
+  self.db.ignored[realmName .. "-" .. toonName] = nil
 end
 
 
