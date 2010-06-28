@@ -3,10 +3,11 @@
 ## Title: RealIDClean
 ## Notes: Cleans your friends list of toons belonging to your RealID friends
 ## Author: Ithato
-## Version: Pre-Alpha
+## Version: 0.1a
 ## X-Website: http://ithato.com/
 ## X-Email: shane@ithato.com
-## X-Category: Misc
+## X-Category: Chat/Communication
+## X-Credits: Tekkub (addon template)
 
 ## SavedVariables: RealIDCleanDB
 ## SavedVariablesPerCharacter: RealIDCleanDBPC
