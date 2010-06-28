@@ -22,11 +22,7 @@ SlashCmdList[myname:upper()] = function(msg)
   elseif msg == "undoall" then
     ns:UndoAllRemovals()
   elseif msg == "alts" then
-  for fullName, alts in pairs(ns.db.friends) do
-    if #(alts) > 0 then
-    ns:ListRealIDAlts(fullName)
-    end
-  end
+	ns:ListRealIDAlts()
   elseif msg == "auto" then
     ns.db.auto = not ns.db.auto
     if ns.db.auto then
@@ -38,12 +34,10 @@ SlashCmdList[myname:upper()] = function(msg)
 end
 
 
-function ns:ListRealIDAlts(fullName)
-  if #self.db.friends[fullName] > 0 then
-    for realm, alts in pairs(self.db.friends[fullName]) do
-      self.Print(fullName .. " : " .. realm .. " - " .. table.concat(alts, ", "))
+function ns:ListRealIDAlts()
+  for fullName,realms in pairs(self.db.friends) do
+    for realm, alts in pairs(realms) do
+      print(fullName .. " : " .. realm .. " - " .. table.concat(alts, ", "))
     end
-  else
-    self.Print(fullName .. " has no known alts.")
   end
 end
