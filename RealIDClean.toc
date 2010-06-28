@@ -27,3 +27,4 @@ UtilityFunctions.lua
 EventDispatcher.lua
 
 RealIDClean.lua
+BNet.lua

@@ -36,3 +36,14 @@ SlashCmdList[myname:upper()] = function(msg)
     end
   end
 end
+
+
+function ns:ListRealIDAlts(fullName)
+  if #self.db.friends[fullName] > 0 then
+    for realm, alts in pairs(self.db.friends[fullName]) do
+      self.Print(fullName .. " : " .. realm .. " - " .. table.concat(alts, ", "))
+    end
+  else
+    self.Print(fullName .. " has no known alts.")
+  end
+end

@@ -7,11 +7,13 @@ ns.defaultsPC = {}
 
 
 function ns.InitDB()
-  -- local myname = "RealIDClean"
+  local realm = GetRealmName()
+
   _G[myname.."DB"] = setmetatable(_G[myname.."DB"] or {}, {__index = ns.defaults})
   ns.db = _G[myname.."DB"]
   if not ns.db.friends then ns.db.friends = {} end
   if not ns.db.ignored then ns.db.ignored = {} end
+  if not ns.db.ignored[realm] then ns.db.ignored[realm] = {} end
   if ns.db.auto == nil then ns.db.auto = false end
 
   _G[myname.."DBPC"] = setmetatable(_G[myname.."DBPC"] or {}, {__index = ns.defaultsPC})
