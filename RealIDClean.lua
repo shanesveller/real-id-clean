@@ -22,18 +22,18 @@ function ns:PLAYER_LOGIN()
   self:RegisterEvent("PLAYER_LOGOUT")
 
   -- Do anything you need to do after the player has entered the world
--- Don't scan if player logged in/reloaded in combat
-if not InCombatLockdown() then
-  self:CollectRealIDFriends()
-  self:CollectRealIDToons()
-  if self.db.auto then self:CheckFriendsMatches() end
+  -- Don't scan if player logged in/reloaded in combat
+  if not InCombatLockdown() then
+    self:CollectRealIDFriends()
+    self:CollectRealIDToons()
+    if self.db.auto then self:CheckFriendsMatches() end
 
-  self:RegisterEvent("BN_FRIEND_LIST_SIZE_CHANGED")
-  self:RegisterEvents("BN_FRIEND_TOON_ONLINE","BN_FRIEND_ACCOUNT_ONLINE")
-  self:RegisterEvent("FRIENDLIST_UPDATE")
-end
+    self:RegisterEvent("BN_FRIEND_LIST_SIZE_CHANGED")
+    self:RegisterEvents("BN_FRIEND_TOON_ONLINE","BN_FRIEND_ACCOUNT_ONLINE")
+    self:RegisterEvent("FRIENDLIST_UPDATE")
+  end
 
-self:RegisterEvents("PLAYER_ENTER_COMBAT", "PLAYER_LEAVE_COMBAT")
+  self:RegisterEvents("PLAYER_ENTER_COMBAT", "PLAYER_LEAVE_COMBAT")
 
   self:UnregisterEvent("PLAYER_LOGIN")
   self.PLAYER_LOGIN = nil
