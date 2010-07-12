@@ -16,7 +16,8 @@ SlashCmdList[myname:upper()] = function(msg)
     ns.Print("Data on your Real ID friends' alts has been cleared.")
   elseif msg == "clearignored" then
     ns.Print("Ignored characters cleared.")
-    ns.db.ignored = {}
+    wipe(ns.db.ignored)
+	ns.db.ignored[GetRealmName()] = {}
   elseif msg == "undo" then
     ns:UndoLastRemoval()
   elseif msg == "undoall" then
