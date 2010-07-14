@@ -31,7 +31,7 @@ function ns:PLAYER_LOGIN()
     self:RegisterEvents("BN_FRIEND_TOON_ONLINE","BN_FRIEND_ACCOUNT_ONLINE","BN_FRIEND_LIST_SIZE_CHANGED","FRIENDLIST_UPDATE")
   end
 
-  self:RegisterEvents("PLAYER_ENTER_COMBAT", "PLAYER_LEAVE_COMBAT")
+  self:RegisterEvents("PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED")
 
   self:UnregisterEvent("PLAYER_LOGIN")
   self.PLAYER_LOGIN = nil
@@ -45,14 +45,14 @@ end
 
 
 -- Be combat friendly
-function ns:PLAYER_ENTER_COMBAT()
+function ns:PLAYER_REGEN_DISABLED()
   StaticPopup_Hide("REALID_CLEAN_PROMPT")
   self:UnregisterEvents("BN_FRIEND_TOON_ONLINE","BN_FRIEND_ACCOUNT_ONLINE","BN_FRIEND_LIST_SIZE_CHANGED","FRIENDLIST_UPDATE")
 end
 
 
 -- Re-activate after combat
-function ns:PLAYER_LEAVE_COMBAT()
+function ns:PLAYER_REGEN_ENABLED()
   self:RegisterEvents("BN_FRIEND_LIST_SIZE_CHANGED","FRIENDLIST_UPDATE","BN_FRIEND_TOON_ONLINE","BN_FRIEND_ACCOUNT_ONLINE")
 end
 
